@@ -1,3 +1,5 @@
+⭐ If you find this sample code helpful in any way, feel free to give it a star. Your support means a lot!
+
 ﻿# Hangfire_Practice
 A simple repository for learning and practicing Hangfire background job processing in .NET applications.
 

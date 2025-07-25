@@ -22,11 +22,12 @@ public static class DependencyInjector
 
     public static void ConfigureHangfire(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("HangfireConnection");
-        var storageType = configuration["Hangfire:StorageType"];
-        var workerCount = configuration.GetValue<int>("Hangfire:WorkerCount");
+        services.Configure<HangfireOptions>(configuration.GetSection("Hangfire"));
 
-        switch (storageType?.ToLower())
+        var connectionString = configuration.GetConnectionString("HangfireConnection");
+        var hangfireOptions = configuration.GetSection("Hangfire").Get<HangfireOptions>();
+
+        switch (hangfireOptions?.StorageType?.ToLower())
         {
             case "memory":
                 services.AddHangfire(config => config
@@ -52,11 +53,10 @@ public static class DependencyInjector
                 break;
         }
 
-        // 添加 Hangfire 服务器
         services.AddHangfireServer(options =>
         {
-            options.WorkerCount = workerCount;
-            options.Queues = configuration.GetSection("Hangfire:Queues").Get<string[]>() ?? new[] { "default" };
+            options.WorkerCount = hangfireOptions?.WorkerCount ?? 20;
+            options.Queues = hangfireOptions?.Queues ?? new[] { "default" };
         });
     }
 }

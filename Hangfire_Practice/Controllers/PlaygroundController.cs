@@ -56,10 +56,15 @@ public class PlaygroundController(
         return Ok("ConsoleLogJob scheduled");
     }
 
+    /// <param name="jobId">
+    /// Unique Job Id for the recurring job.
+    /// - If a different jobId is provided, a new recurring job will be created.
+    /// - If the same jobId already exists, the existing job will be replaced (updated with new settings).
+    /// </param>
     [HttpPost("console-log/recurring")]
-    public IActionResult RegisterRecurringConsoleLog([FromQuery] string cron)
+    public IActionResult RegisterRecurringConsoleLog([FromQuery] string cron, [FromQuery] string jobId ="ConsoleJob")
     {
-        _dispatcher.AddOrUpdateRecurring<ConsoleLogJob>("ConsoleLogJob", cron);
+        _dispatcher.AddOrUpdateRecurring<ConsoleLogJob>(jobId, cron);
         return Ok("ConsoleLogJob recurring registered");
     }
 
@@ -81,8 +86,13 @@ public class PlaygroundController(
         return Ok("WorkArgsJob scheduled");
     }
 
+    /// <param name="jobId">
+    /// Unique Job Id for the recurring job.
+    /// - If a different jobId is provided, a new recurring job will be created.
+    /// - If the same jobId already exists, the existing job will be replaced (updated with new settings).
+    /// </param>
     [HttpPost("work-args/recurring")]
-    public IActionResult RegisterRecurringWorkArgs([FromBody] WorkArgsJobArgs args, [FromQuery] string cron)
+    public IActionResult RegisterRecurringWorkArgs([FromBody] WorkArgsJobArgs args, [FromQuery] string cron, [FromQuery] string jobId="WorkArgsJob")
     {
         _dispatcher.AddOrUpdateRecurring<WorkArgsJob, WorkArgsJobArgs>("WorkArgsJob", args, cron);
         return Ok("WorkArgsJob recurring registered");
@@ -106,10 +116,15 @@ public class PlaygroundController(
         return Ok("WorkRequestJob scheduled");
     }
 
+    /// <param name="jobId">
+    /// Unique Job Id for the recurring job.
+    /// - If a different jobId is provided, a new recurring job will be created.
+    /// - If the same jobId already exists, the existing job will be replaced (updated with new settings).
+    /// </param>
     [HttpPost("work-request/recurring")]
-    public IActionResult RegisterRecurringWorkRequest([FromBody] WorkRequestJobRequest request, [FromQuery] string cron)
+    public IActionResult RegisterRecurringWorkRequest([FromBody] WorkRequestJobRequest request, [FromQuery] string cron, [FromQuery] string jobId="WorkRequestJob")
     {
-        _dispatcher.AddOrUpdateRecurring<WorkRequestJob, WorkRequestJobRequest>("WorkRequestJob", request, cron);
+        _dispatcher.AddOrUpdateRecurring<WorkRequestJob, WorkRequestJobRequest>(jobId, request, cron);
         return Ok("WorkRequestJob recurring registered");
     }
 
